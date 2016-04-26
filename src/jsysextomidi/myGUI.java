@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package jsysextomidi;
+import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import javax.swing.*;
 
@@ -18,14 +20,29 @@ public class myGUI extends JFrame{
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        buildPanel(midiDevices);
+        JPanel thePanel = buildPanel(midiDevices);
+        
+        setContentPane(thePanel);
+        setSize(250, 150);
+        setLocation(100, 100);
         
         setVisible(true);
         
     }
     
-    private void buildPanel(LinkedList midiDevices){
-        JComboBox deviceList = new JComboBox(midiDevices);
+    private JPanel buildPanel(LinkedList midiDevices) {
+        JComboBox deviceList;
+        deviceList = new JComboBox(midiDevices.toArray());
+        
+        JPanel content = new JPanel();
+        content.setLayout(new BorderLayout());
+        content.add(deviceList, BorderLayout.CENTER);
+        
+        //add an okay button
+        JButton okButton = new JButton("OK");
+     //   okButton.addActionListener(this);
+        
+        return content;
     }
     
 }
