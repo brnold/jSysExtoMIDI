@@ -19,6 +19,7 @@ import	javax.sound.midi.MetaMessage;
 import	javax.sound.midi.SysexMessage;
 import	javax.sound.midi.Receiver;
 
+
 /**
  *
  * @author Benjamin
@@ -27,8 +28,11 @@ public class myMidiReceiver
 implements	Receiver
 {
     private PrintStream		m_printStream;
-    String sysExMessageStr;
+    private LinkedList llQueue;
+    private Receiver receiverToOrgan;
+    private String sysExMessageStr;
     LinkedList<Byte> sysExBytes = null, oldMessageBytes= null; 
+    collectionStopObjects theStops;
 
     
     public myMidiReceiver(PrintStream printStream)
@@ -36,23 +40,40 @@ implements	Receiver
         m_printStream = printStream;
     }
     
+    public myMidiReceiver(Receiver receiverToOrgan)
+    {
+        this.receiverToOrgan = receiverToOrgan;
+        theStops = new collectionStopObjects();
+    }
     
+    /**
+     * This gets the Midi message. Directs the Sysex to the decoded, drops the
+     * normal messages.
+     * @param message, the Midi Message
+     * @param timeStamp, not used, inherrieted
+     */
     @Override
     public void send(MidiMessage message, long timeStamp) {
-       String strMessage = null;
+       LinkedList listBytes = null;
        
-       if(message instanceof ShortMessage){
-           //this.send(decodeMessage((ShortMessage) message));
-       }
+//       if(message instanceof ShortMessage){
+//           //this.send(decodeMessage((ShortMessage) message));
+//       }
        
        if (message instanceof SysexMessage){
-          strMessage = decodeMessage((SysexMessage) message);
+          listBytes = decodeMessage((SysexMessage) message);
+          
+          if(listBytes != null){
+              //translate it into MIDI messages
+              //call the convertSYsextoMidi
+              //while (queue of sysexmidi messages >0)
+              // pop elements, send them out the midi port
+              
+              // hopefully I'm done
+          }
+          
        }
-       
-       if(strMessage == "NotYet"){
-       }else{
-       //m_printStream.println(strMessage);
-       }
+   
     }
     
     public void decodeMessage(ShortMessage message)
@@ -60,7 +81,7 @@ implements	Receiver
         
     }
     
-    public String decodeMessage(SysexMessage message)
+    public LinkedList decodeMessage(SysexMessage message)
     {
         byte[]	abData = message.getData();
         String messageHex = getHexString(abData);
@@ -87,12 +108,12 @@ implements	Receiver
             }
         }
 
-
+        //message is done, now decode it
         if((messageHex.charAt(lenghtMessage-2)=='F') &&(messageHex.charAt(lenghtMessage-1)=='7')){
             sysexToStop(sysExBytes);
-            return sysExMessageStr;
+            return sysExBytes;
         }
-        else return "NotYet";
+        else return null;
     }
 
     

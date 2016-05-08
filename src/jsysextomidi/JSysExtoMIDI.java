@@ -36,40 +36,40 @@ public class JSysExtoMIDI {
         System.out.println(infos[2].getDescription());
         
         try{
-            //device = MidiSystem.getMidiDevice(infos[1]);
-            //device.open();
+            device = MidiSystem.getMidiDevice(infos[1]);
+            device.open();
             
-            softwarePort = MidiSystem.getMidiDevice(infos[1  ]);
+            softwarePort = MidiSystem.getMidiDevice(infos[1]);
             softwarePort.open();
         } catch (MidiUnavailableException e){
             System.out.println("Hey, the devices are unavailble!");
         }
         
-       // Receiver r = new myMidiReceiver(System.out);
+        Receiver r = new myMidiReceiver(System.out);
         
         
         try
         {
-            //Transmitter tCord = device.getTransmitter(); //Make a Transmitter from my Midi Cord
-           // tCord.setReceiver(r); //Set the receiver to my class file
+            Transmitter tCord = device.getTransmitter(); //Make a Transmitter from my Midi Cord
+            tCord.setReceiver(r); //Set the receiver to my class file
             
             Receiver receiverSoftware = softwarePort.getReceiver();
             
-            ShortMessage m;
-            for(int i = 0; i < 127; i++){
-                
-                try {
-                    m = new ShortMessage(NOTE_ON, 13, i, 127);
-                    receiverSoftware.send(m, -1);
-                    Thread.sleep(125);
-                    m = new ShortMessage(NOTE_OFF, 13, i, 127);
-                } catch (InvalidMidiDataException ex) {
-                    System.out.println("Blah Blah data bo0!");
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(JSysExtoMIDI.class.getName()).log(Level.SEVERE, null, ex);
-                }
+//            ShortMessage m;
+//            for(int i = 0; i < 127; i++){
+//                
+//                try {
+//                    m = new ShortMessage(NOTE_ON, 13, i, 127);
+//                    receiverSoftware.send(m, -1);
+//                    Thread.sleep(125);
+//                    m = new ShortMessage(NOTE_OFF, 13, i, 127);
+//                } catch (InvalidMidiDataException ex) {
+//                    System.out.println("Blah Blah data bo0!");
+//                } catch (InterruptedException ex) {
+//                    Logger.getLogger(JSysExtoMIDI.class.getName()).log(Level.SEVERE, null, ex);
+//                }
              
-            }
+            //}
         }
         catch (MidiUnavailableException e)
                 {
