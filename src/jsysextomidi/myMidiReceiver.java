@@ -66,9 +66,12 @@ implements	Receiver
           if(listBytes != null){
               //translate it into MIDI messages
               //call the convertSYsextoMidi
+              theStops.sysExToMidiConverstion(listBytes);
               //while (queue of sysexmidi messages >0)
               // pop elements, send them out the midi port
-              
+              while(theStops.isEmpty() == false){
+                  receiverToOrgan.send(theStops.getNextMessage(), -1);
+              }
               // hopefully I'm done
           }
           
